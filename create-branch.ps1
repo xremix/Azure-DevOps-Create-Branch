@@ -157,22 +157,46 @@ ORDER BY [System.Id]
 # Write-Host "======================================================" -ForegroundColor Cyan
 
 function Get-DevOpsProjectFromFile {
-    $filePath = Join-Path (Get-Location) ".devops-project"
-    if (Test-Path $filePath) {
-        $lines = Get-Content $filePath
-        $org = $null
-        $proj = $null
-        foreach ($line in $lines) {
-            if ($line -match '^organization=(.+)$') {
-                $org = $Matches[1]
-            } elseif ($line -match '^project=(.+)$') {
-                $proj = $Matches[1]
+
+    # Try to find git root
+    $gitRoot = $null
+    try {
+        $gitRoot = git rev-parse --show-toplevel 2>$null
+    } catch {}
+
+    # Build list of directories to search: current dir up to git root
+    $dirs = @((Get-Location).Path)
+    if ($gitRoot) {
+        $current = (Get-Location).Path
+        while ($current -ne $gitRoot) {
+            $parent = Split-Path $current -Parent
+            if ($parent -and $parent -ne $current) {
+                $dirs += $parent
+                $current = $parent
+            } else {
+                break
             }
         }
-        return @{ Organization = $org; Project = $proj }
-    } else {
-        return $null
+        $dirs += $gitRoot
     }
+
+    foreach ($dir in $dirs) {
+        $filePath = Join-Path $dir ".devops-project"
+        if (Test-Path $filePath) {
+            $lines = Get-Content $filePath
+            $org = $null
+            $proj = $null
+            foreach ($line in $lines) {
+                if ($line -match '^organization=(.+)$') {
+                    $org = $Matches[1]
+                } elseif ($line -match '^project=(.+)$') {
+                    $proj = $Matches[1]
+                }
+            }
+            return @{ Organization = $org; Project = $proj }
+        }
+    }
+    return $null
 }
 
 # Validate parameters or read from .devops-project file
