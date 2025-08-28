@@ -65,6 +65,20 @@ No parameters
 - If you have uncommitted changes, the script will stash them before switching branches and pop them after checkout.
 - You can set `$AlwaysCreateBranch = $true` in the script to always create a new branch, even if it already exists.
 
+## macOS Pro Tip
+
+add this to your `.bash_prfile` or `.zshrc` file:
+
+```bash
+function createbranch(){
+  pwsh PATHTOSCRIPT/create-branch.ps1 "YOURORGANIZATION" "YOURPROJECT"
+}
+alias branch=createbranch
+alias b=createbranch
+```
+
+That way you can simply run `b` to create or switch branches.
+
 ## Troubleshooting
 
 - If you see errors about Azure CLI or extensions, ensure both are installed and you are logged in.
