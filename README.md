@@ -2,6 +2,8 @@
 
 This repository contains a PowerShell script (`create-branch.ps1`) designed to streamline the process of creating and checking out feature or bug branches in a Git repository based on Azure DevOps user stories assigned to you.
 
+![Screenshot](Create-DevOps-Branch.png)
+
 ## Features
 
 - **Lists user stories assigned to the current user** in Azure DevOps with states that are not closed, done, or otherwise completed.
