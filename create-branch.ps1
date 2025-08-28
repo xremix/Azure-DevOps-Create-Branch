@@ -102,12 +102,12 @@ ORDER BY [System.Id]
         $selectedLine = Read-Host "Select User Story"
         if ($selectedLine -match '^[0-9]+$' -and $selectedLine -ge 1 -and $selectedLine -le $workItems.Count) {
             $selectedItem = $workItems[$selectedLine - 1]
-            Write-Host "Selected Work Item ID: $($selectedItem.id)" -ForegroundColor Yellow
+
             # map type, if is not bug, write feature/
             if ($workItemType -ne "Bug") {
                 $workItemType = "feature"
             }
-            # Branch scheme: type/ID-title-lower-case
+            $title
             $branchName = "$($workItemType.ToLower())/$($id)-$($title.ToLower().Replace(' ', '-'))"
             # cut branch name after 100 chars
             $branchName = $branchName.Substring(0, [Math]::Min($branchName.Length, 100))
