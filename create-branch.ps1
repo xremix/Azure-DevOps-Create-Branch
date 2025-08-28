@@ -83,8 +83,8 @@ ORDER BY [System.Id]
         }
 
         # Display results
-        Write-Host ""
         Write-Host "$($queryResult.Count) user stories assigned to $currentUser" -ForegroundColor Green
+        Write-Host ""
 
         # Store work items in an array for indexed access
         $workItems = @()
@@ -101,6 +101,7 @@ ORDER BY [System.Id]
         }
 
         # Ask user for line number
+        Write-Host
         $selectedLine = Read-Host "Select User Story"
         if ($selectedLine -match '^[0-9]+$' -and $selectedLine -ge 1 -and $selectedLine -le $workItems.Count) {
             $selectedItem = $workItems[$selectedLine - 1]
@@ -109,7 +110,7 @@ ORDER BY [System.Id]
             if ($workItemType -ne "Bug") {
                 $workItemType = "feature"
             }
-            $title
+
             $branchName = "$($workItemType.ToLower())/$($id)-$($title.ToLower().Replace(' ', '-'))"
             # cut branch name after 100 chars
             $branchName = $branchName.Substring(0, [Math]::Min($branchName.Length, 100))
@@ -130,7 +131,7 @@ ORDER BY [System.Id]
                 }
 
         } else {
-            Write-Host "Invalid selection." -ForegroundColor Red
+            Write-Host "Invalid number. Please choose a user story from the list above." -ForegroundColor Red
         }
     }
     catch {
