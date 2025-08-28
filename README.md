@@ -18,6 +18,25 @@
 - **Configurable behavior**: Option to always create a new branch or just check out if it exists (via `$AlwaysCreateBranch`).
 - **Handles Azure CLI and extension setup**: Checks for Azure CLI and Azure DevOps extension, installs if missing.
 
+## Branch Naming Scheme
+
+Branches are automatically named using the following format:
+
+```TYPE/ID-TITLE```
+
+### Types
+
+- feature
+- bug
+
+### Examples
+
+- `feature/123-add-login-button`
+- `feature/456-update-user-profile`
+- `bug/789-fix-crash-on-save`
+- `feature/1011-refactor-auth-module`
+
+
 ## Prerequisites
 
 - **Azure CLI** installed and available in your PATH.
