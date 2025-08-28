@@ -43,7 +43,7 @@ function Get-InProgressUserStories {
 
     # Set default organization and project
     az devops configure --defaults organization=https://dev.azure.com/$org project=$proj
-
+    
     # Get current user information
     # Write-Host "Getting current user information..." -ForegroundColor Yellow
     try {
@@ -58,6 +58,7 @@ function Get-InProgressUserStories {
         Write-Error "Failed to get current user information: $($_.Exception.Message)"
         return
     }
+    
 
     # Query for user stories assigned to current user in "In Progress" state
     $wiqlQuery = @"
@@ -195,6 +196,21 @@ function Get-DevOpsProjectFromFile {
             }
             return @{ Organization = $org; Project = $proj }
         }
+    }
+    # Fallback: check script folder
+    $scriptFilePath = Join-Path $PSScriptRoot ".devops-project"
+    if (Test-Path $scriptFilePath) {
+        $lines = Get-Content $scriptFilePath
+        $org = $null
+        $proj = $null
+        foreach ($line in $lines) {
+            if ($line -match '^organization=(.+)$') {
+                $org = $Matches[1]
+            } elseif ($line -match '^project=(.+)$') {
+                $proj = $Matches[1]
+            }
+        }
+        return @{ Organization = $org; Project = $proj }
     }
     return $null
 }

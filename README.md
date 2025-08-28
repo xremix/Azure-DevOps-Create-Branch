@@ -61,6 +61,20 @@ To run the script, open a PowerShell terminal and use one of the following comma
 
 The script will guide you through selecting a user story and creating or switching branches automatically.
 
+### Parameters
+
+When you run the script, it determines the `Organization` and `Project` parameters using the following fallback order:
+
+1. **Command-line parameters**: If you provide parameters directly to the script, these are used.
+2. **.devops-project file**: If parameters are missing, the script searches for a `.devops-project` file in:
+  - The current working directory
+  - Each parent directory up to the git project root (if available)
+  - As a final fallback, the folder containing the script itself
+   The first `.devops-project` file found is used. You may include just one or both lines (`organization=...` and/or `project=...`).
+3. **Interactive prompt**: If either parameter is still missing, the script will prompt you to enter the value interactively.
+
+This ensures you can run the script from any subfolder in your project, and it will find your settings automatically if configured.
+
 ### Using a .devops-project file
 
 You can create a `.devops-project` file in your current working directory (where you run the script) to avoid entering parameters each time. Example:
