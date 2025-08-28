@@ -84,30 +84,37 @@ ORDER BY [System.Id]
         Write-Host ""
         Write-Host "$($queryResult.Count) user stories assigned to $currentUser" -ForegroundColor Green
 
-            # Store work items in an array for indexed access
-            $workItems = @()
-            $index = 1
-            foreach ($workItem in $queryResult) {
-                $workItems += $workItem
-                $id = $workItem.id
-                $title = $workItem.fields.'System.Title'
-                $state = $workItem.fields.'System.State'
-                $workItemType = $workItem.fields.'System.WorkItemType'
-                $titleColor = if ($workItemType -eq "Bug") { "Red" } else { "Cyan" }
-                Write-Host "$index. ${id}: ${title} [$state]" -ForegroundColor $titleColor
-                $index++
+        # Store work items in an array for indexed access
+        $workItems = @()
+        $index = 1
+        foreach ($workItem in $queryResult) {
+            $workItems += $workItem
+            $id = $workItem.id
+            $title = $workItem.fields.'System.Title'
+            $state = $workItem.fields.'System.State'
+            $workItemType = $workItem.fields.'System.WorkItemType'
+            $titleColor = if ($workItemType -eq "Bug") { "Red" } else { "Cyan" }
+            Write-Host "$index. ${id}: ${title} [$state]" -ForegroundColor $titleColor
+            $index++
+        }
+
+        # Ask user for line number
+        $selectedLine = Read-Host "Select User Story"
+        if ($selectedLine -match '^[0-9]+$' -and $selectedLine -ge 1 -and $selectedLine -le $workItems.Count) {
+            $selectedItem = $workItems[$selectedLine - 1]
+            Write-Host "Selected Work Item ID: $($selectedItem.id)" -ForegroundColor Yellow
+            # map type, if is not bug, write feature/
+            if ($workItemType -ne "Bug") {
+                $workItemType = "feature"
             }
-
-            # Ask user for line number
-            $selectedLine = Read-Host "Select User Story:"
-            if ($selectedLine -match '^[0-9]+$' -and $selectedLine -ge 1 -and $selectedLine -le $workItems.Count) {
-                $selectedItem = $workItems[$selectedLine - 1]
-                Write-Host "Selected Work Item ID: $($selectedItem.id)" -ForegroundColor Yellow
-            } else {
-                Write-Host "Invalid selection." -ForegroundColor Red
-            }
-
-
+            # Branch scheme: type/ID-title-lower-case
+            $branchName = "$($workItemType.ToLower())/$($id)-$($title.ToLower().Replace(' ', '-'))"
+            # cut branch name after 100 chars
+            $branchName = $branchName.Substring(0, [Math]::Min($branchName.Length, 100))
+            Write-Host "Created branch: $branchName" -ForegroundColor Green
+        } else {
+            Write-Host "Invalid selection." -ForegroundColor Red
+        }
     }
     catch {
         Write-Error "Failed to query work items: $($_.Exception.Message)"
