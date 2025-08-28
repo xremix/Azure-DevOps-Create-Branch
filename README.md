@@ -63,7 +63,7 @@ The script will guide you through selecting a user story and creating or switchi
 
 ### Using a .devops-project file
 
-You can create a `.devops-project` file in the same directory as the script to avoid entering parameters each time. Example:
+You can create a `.devops-project` file in your current working directory (where you run the script) to avoid entering parameters each time. Example:
 
 ```text
 organization=MyOrganization

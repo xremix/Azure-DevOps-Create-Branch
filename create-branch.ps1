@@ -157,7 +157,7 @@ ORDER BY [System.Id]
 # Write-Host "======================================================" -ForegroundColor Cyan
 
 function Get-DevOpsProjectFromFile {
-    $filePath = Join-Path $PSScriptRoot ".devops-project"
+    $filePath = Join-Path (Get-Location) ".devops-project"
     if (Test-Path $filePath) {
         $lines = Get-Content $filePath
         $org = $null
