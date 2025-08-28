@@ -36,7 +36,6 @@ Branches are automatically named using the following format:
 - `bug/789-fix-crash-on-save`
 - `feature/1011-refactor-auth-module`
 
-
 ## Prerequisites
 
 - **Azure CLI** installed and available in your PATH.
@@ -44,6 +43,29 @@ Branches are automatically named using the following format:
 - You must be logged in to Azure CLI (`az login`).
 
 ## How to Run
+## .devops-project File
+
+You can optionally create a `.devops-project` file in the same directory as the script to automatically provide your Azure DevOps organization and project settings. This allows you to run the script without specifying parameters each time.
+
+### Format
+
+The file should contain lines in the following format:
+
+```
+organization=YourOrganizationName
+project=YourProjectName
+```
+
+You may include just one or both lines. If only one is present, the script will use it for the corresponding parameter and prompt for the other if needed.
+
+### Example
+
+```
+organization=my-azure-org
+project=my-devops-project
+```
+
+If you run the script without parameters, it will read from `.devops-project` and use any values found.
 
 1. Open a PowerShell terminal.
 2. Run the script with the required parameters:
@@ -61,7 +83,7 @@ Branches are automatically named using the following format:
    - Prompt you to select a user story by number.
    - Suggest a branch name and allow you to confirm or edit it.
    - Create or check out the branch in your local Git repository.
-  - If the branch already exists, you will be prompted to either switch to it or create a new branch with "-2" appended to the suggested name.
+   - If the branch already exists, you will be prompted to either switch to it or create a new branch with "-2" appended to the suggested name.
 
 ## Example
 

@@ -2,10 +2,10 @@
 # Lists user stories assigned to the current user with state "In Progress"
 
 param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$false)]
     [string]$Organization,
 
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory=$false)]
     [string]$Project
 )
 
@@ -156,15 +156,52 @@ ORDER BY [System.Id]
 # Write-Host "Azure DevOps User Story Query Script (using Azure CLI)" -ForegroundColor Cyan
 # Write-Host "======================================================" -ForegroundColor Cyan
 
-# Validate parameters
-if ([string]::IsNullOrWhiteSpace($Organization)) {
-    Write-Error "Organization parameter is required"
-    exit 1
+function Get-DevOpsProjectFromFile {
+    $filePath = Join-Path $PSScriptRoot ".devops-project"
+    if (Test-Path $filePath) {
+        $lines = Get-Content $filePath
+        $org = $null
+        $proj = $null
+        foreach ($line in $lines) {
+            if ($line -match '^organization=(.+)$') {
+                $org = $Matches[1]
+            } elseif ($line -match '^project=(.+)$') {
+                $proj = $Matches[1]
+            }
+        }
+        return @{ Organization = $org; Project = $proj }
+    } else {
+        return $null
+    }
 }
 
+# Validate parameters or read from .devops-project file
+if ([string]::IsNullOrWhiteSpace($Organization) -or [string]::IsNullOrWhiteSpace($Project)) {
+    $devopsInfo = Get-DevOpsProjectFromFile
+    if ($devopsInfo) {
+        if ([string]::IsNullOrWhiteSpace($Organization) -and $devopsInfo.Organization) {
+            $Organization = $devopsInfo.Organization
+        }
+        if ([string]::IsNullOrWhiteSpace($Project) -and $devopsInfo.Project) {
+            $Project = $devopsInfo.Project
+        }
+    }
+}
+
+# Ask user to fill out required parameters
+if ([string]::IsNullOrWhiteSpace($Organization)) {
+    $Organization = Read-Host "Enter Azure DevOps Organization (e.g. https://dev.azure.com/your-org)"
+    if ([string]::IsNullOrWhiteSpace($Organization)) {
+        Write-Error "Organization parameter is required. Aborting."
+        exit 1
+    }
+}
 if ([string]::IsNullOrWhiteSpace($Project)) {
-    Write-Error "Project parameter is required"
-    exit 1
+    $Project = Read-Host "Enter Azure DevOps Project Name"
+    if ([string]::IsNullOrWhiteSpace($Project)) {
+        Write-Error "Project parameter is required. Aborting."
+        exit 1
+    }
 }
 
 # Execute the function
