@@ -81,19 +81,31 @@ ORDER BY [System.Id]
         }
 
         # Display results
+        Write-Host ""
         Write-Host "$($queryResult.Count) user stories assigned to $currentUser" -ForegroundColor Green
 
-        foreach ($workItem in $queryResult) {
-            # Work items from Azure CLI have fields nested under 'fields' property
-            $id = $workItem.id
-            $title = $workItem.fields.'System.Title'
-            $state = $workItem.fields.'System.State'
-            $workItemType = $workItem.fields.'System.WorkItemType'
+            # Store work items in an array for indexed access
+            $workItems = @()
+            $index = 1
+            foreach ($workItem in $queryResult) {
+                $workItems += $workItem
+                $id = $workItem.id
+                $title = $workItem.fields.'System.Title'
+                $state = $workItem.fields.'System.State'
+                $workItemType = $workItem.fields.'System.WorkItemType'
+                $titleColor = if ($workItemType -eq "Bug") { "Red" } else { "Cyan" }
+                Write-Host "$index. ${id}: ${title} [$state]" -ForegroundColor $titleColor
+                $index++
+            }
 
-            # Set color based on work item type
-            $titleColor = if ($workItemType -eq "Bug") { "Red" } else { "Cyan" }
-            Write-Host "${id}: ${title} [$state]" -ForegroundColor $titleColor
-        }
+            # Ask user for line number
+            $selectedLine = Read-Host "Select User Story:"
+            if ($selectedLine -match '^[0-9]+$' -and $selectedLine -ge 1 -and $selectedLine -le $workItems.Count) {
+                $selectedItem = $workItems[$selectedLine - 1]
+                Write-Host "Selected Work Item ID: $($selectedItem.id)" -ForegroundColor Yellow
+            } else {
+                Write-Host "Invalid selection." -ForegroundColor Red
+            }
 
 
     }
