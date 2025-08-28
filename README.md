@@ -1,6 +1,11 @@
-# Devops-Create-Branch
+# Azure DevOps Create-Branch
 
-This repository contains a PowerShell script (`create-branch.ps1`) designed to streamline the process of creating and checking out feature or bug branches in a Git repository based on Azure DevOps user stories assigned to you.
+**Azure DevOps Create-Branch** is the only tool you'll ever need to switch branches.
+
+- Automatically create branches with a common branch scheme
+- Find assigned User Stories in DevOps and switch to the branch
+- Branch exists? No problem, it'll switch to it
+- You make an update to the user story? No worries, it will create a new branch for you
 
 ![Screenshot](Create-DevOps-Branch.png)
 
@@ -9,7 +14,7 @@ This repository contains a PowerShell script (`create-branch.ps1`) designed to s
 - **Lists user stories assigned to the current user** in Azure DevOps with states that are not closed, done, or otherwise completed.
 - **Interactive selection**: Prompts you to select a user story from the list.
 - **Automatic branch naming**: Creates a branch name in the format `feature/<id>-<title>` or `bug/<id>-<title>`.
-- **Branch management**: Checks if the branch exists; if not, creates it. If it exists, checks it out and stashes/pops any open changes.
+- **Branch management**: Checks if the branch exists; if not, creates it. If it exists, the script now prompts you to choose whether to switch to the existing branch or create a new branch with "-2" appended to the name. Stashes/pops any open changes when switching.
 - **Configurable behavior**: Option to always create a new branch or just check out if it exists (via `$AlwaysCreateBranch`).
 - **Handles Azure CLI and extension setup**: Checks for Azure CLI and Azure DevOps extension, installs if missing.
 
@@ -37,6 +42,7 @@ This repository contains a PowerShell script (`create-branch.ps1`) designed to s
    - Prompt you to select a user story by number.
    - Suggest a branch name and allow you to confirm or edit it.
    - Create or check out the branch in your local Git repository.
+  - If the branch already exists, you will be prompted to either switch to it or create a new branch with "-2" appended to the suggested name.
 
 ## Example
 
@@ -63,6 +69,7 @@ No parameters
 - The script only lists work items assigned to the current Azure AD user and in a non-completed state.
 - Branch names are truncated to 100 characters for compatibility.
 - If you have uncommitted changes, the script will stash them before switching branches and pop them after checkout.
+- If the branch already exists, you can choose to switch to it or create a new branch with "-2" appended (e.g., `feature/123-title-2`).
 - You can set `$AlwaysCreateBranch = $true` in the script to always create a new branch, even if it already exists.
 
 ## macOS Pro Tip
