@@ -118,7 +118,7 @@ ORDER BY [System.Id]
             $branchName = "$($branchType.ToLower())/$($id)-$($title.ToLower().Replace(' ', '-'))"
             # cut branch name after 100 chars
             $branchName = $branchName.Substring(0, [Math]::Min($branchName.Length, 100))
-            $confirmation = Read-Host "$branchName (enter to confirm)"
+            $confirmation = Read-Host "Branch: $branchName (enter to confirm)"
 
             if (-not [string]::IsNullOrWhiteSpace($confirmation)) {
                 $branchName = $confirmation
@@ -128,10 +128,18 @@ ORDER BY [System.Id]
             if ($AlwaysCreateBranch -or -not (git branch --list $branchName)) {
                 git checkout -b $branchName
             } else {
-                # check out the branch and switch over the open changes
-                git stash
-                git checkout $branchName
-                git stash pop
+                # Ask user if they want to switch to the branch or create a new one
+                Write-Host "Branch '$branchName' already exists" -ForegroundColor Yellow
+                $branchChoice = Read-Host "Switch or Create new branch? [S/c]"
+                if ($branchChoice -eq 'c') {
+                    $newBranchName = "$branchName-2"
+                    git checkout -b $newBranchName
+                } else {
+                    # check out the branch and switch over the open changes
+                    git stash
+                    git checkout $branchName
+                    git stash pop
+                }
             }
 
         } else {
