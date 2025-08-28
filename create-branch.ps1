@@ -9,6 +9,8 @@ param(
     [string]$Project
 )
 
+# Set this to $true to always create a new branch, or $false to check out if it exists
+$AlwaysCreateBranch = $false
 # Function to get user stories assigned to current user in "In Progress" state
 function Get-InProgressUserStories {
     param(
@@ -118,14 +120,14 @@ ORDER BY [System.Id]
             }
 
             # check if branch already exists, if not create it, otherwise checkout
-            if (-not (git branch --list $branchName)) {
-                git checkout -b $branchName
-            } else {
-                # check out the branch and switch over the open changes
-                git stash
-                git checkout $branchName
-                git stash pop
-            }
+                if ($AlwaysCreateBranch -or -not (git branch --list $branchName)) {
+                    git checkout -b $branchName
+                } else {
+                    # check out the branch and switch over the open changes
+                    git stash
+                    git checkout $branchName
+                    git stash pop
+                }
 
         } else {
             Write-Host "Invalid selection." -ForegroundColor Red
