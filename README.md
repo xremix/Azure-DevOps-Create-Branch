@@ -24,27 +24,30 @@ This repository contains a PowerShell script (`create-branch.ps1`) designed to s
 1. Open a PowerShell terminal.
 2. Run the script with the required parameters:
 
-	```powershell
-	.\create-branch.ps1 -Organization <your-organization> -Project <your-project>
-	```
-	- Replace `<your-organization>` with your Azure DevOps organization name.
-	- Replace `<your-project>` with your Azure DevOps project name.
+    ```powershell
+    .\create-branch.ps1 -Organization <your-organization> -Project <your-project>
+    ```
+
+    - Replace `<your-organization>` with your Azure DevOps organization name.
+    - Replace `<your-project>` with your Azure DevOps project name.
 
 3. The script will:
-	- Check your Azure CLI login and extension status.
-	- List all user stories assigned to you that are in progress.
-	- Prompt you to select a user story by number.
-	- Suggest a branch name and allow you to confirm or edit it.
-	- Create or check out the branch in your local Git repository.
+   - Check your Azure CLI login and extension status.
+   - List all user stories assigned to you that are in progress.
+   - Prompt you to select a user story by number.
+   - Suggest a branch name and allow you to confirm or edit it.
+   - Create or check out the branch in your local Git repository.
 
 ## Example
 
 Parameters with names
+
 ```powershell
 .\create-branch.ps1 -Organization MyOrganization -Project MyProject
 ```
 
 Parameters in order
+
 ```powershell
 .\create-branch.ps1 MyOrganization MyProject
 ```
