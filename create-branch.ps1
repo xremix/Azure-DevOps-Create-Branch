@@ -111,7 +111,14 @@ ORDER BY [System.Id]
             $branchName = "$($workItemType.ToLower())/$($id)-$($title.ToLower().Replace(' ', '-'))"
             # cut branch name after 100 chars
             $branchName = $branchName.Substring(0, [Math]::Min($branchName.Length, 100))
-            Write-Host "Created branch: $branchName" -ForegroundColor Green
+            $confirmation = Read-Host "$branchName (enter to confirm)"
+
+            if (-not [string]::IsNullOrWhiteSpace($confirmation)) {
+                $branchName = $confirmation
+            }
+
+            git checkout -b $branchName
+
         } else {
             Write-Host "Invalid selection." -ForegroundColor Red
         }
