@@ -117,7 +117,15 @@ ORDER BY [System.Id]
                 $branchName = $confirmation
             }
 
-            git checkout -b $branchName
+            # check if branch already exists, if not create it, otherwise checkout
+            if (-not (git branch --list $branchName)) {
+                git checkout -b $branchName
+            } else {
+                # check out the branch and switch over the open changes
+                git stash
+                git checkout $branchName
+                git stash pop
+            }
 
         } else {
             Write-Host "Invalid selection." -ForegroundColor Red
@@ -130,8 +138,8 @@ ORDER BY [System.Id]
 }
 
 # Main execution
-Write-Host "Azure DevOps User Story Query Script (using Azure CLI)" -ForegroundColor Cyan
-Write-Host "======================================================" -ForegroundColor Cyan
+# Write-Host "Azure DevOps User Story Query Script (using Azure CLI)" -ForegroundColor Cyan
+# Write-Host "======================================================" -ForegroundColor Cyan
 
 # Validate parameters
 if ([string]::IsNullOrWhiteSpace($Organization)) {
