@@ -42,68 +42,35 @@ Branches are automatically named using the following format:
 - **Git** installed.
 - You must be logged in to Azure CLI (`az login`).
 
-## How to Run
-## .devops-project File
+## Get Started
 
-You can optionally create a `.devops-project` file in the same directory as the script to automatically provide your Azure DevOps organization and project settings. This allows you to run the script without specifying parameters each time.
 
-### Format
-
-The file should contain lines in the following format:
-
-```
-organization=YourOrganizationName
-project=YourProjectName
-```
-
-You may include just one or both lines. If only one is present, the script will use it for the corresponding parameter and prompt for the other if needed.
-
-### Example
-
-```
-organization=my-azure-org
-project=my-devops-project
-```
-
-If you run the script without parameters, it will read from `.devops-project` and use any values found.
-
-1. Open a PowerShell terminal.
-2. Run the script with the required parameters:
-
-    ```powershell
-    .\create-branch.ps1 -Organization <your-organization> -Project <your-project>
-    ```
-
-    - Replace `<your-organization>` with your Azure DevOps organization name.
-    - Replace `<your-project>` with your Azure DevOps project name.
-
-3. The script will:
-   - Check your Azure CLI login and extension status.
-   - List all user stories assigned to you that are in progress.
-   - Prompt you to select a user story by number.
-   - Suggest a branch name and allow you to confirm or edit it.
-   - Create or check out the branch in your local Git repository.
-   - If the branch already exists, you will be prompted to either switch to it or create a new branch with "-2" appended to the suggested name.
-
-## Example
-
-Parameters with names
+To run the script, open a PowerShell terminal and use one of the following commands:
 
 ```powershell
-.\create-branch.ps1 -Organization MyOrganization -Project MyProject
-```
-
-Parameters in order
-
-```powershell
-.\create-branch.ps1 MyOrganization MyProject
-```
-
-No parameters
-
-```powershell
+# Run, to get asked by parameters or read them from .devops-project file
 .\create-branch.ps1
+
+# With parameters
+.\create-branch.ps1 MyOrganization MyProject
+
+# With parameter names
+.\create-branch.ps1 -Organization MyOrganization -Project MyProject
+
 ```
+
+The script will guide you through selecting a user story and creating or switching branches automatically.
+
+### Using a .devops-project file
+
+You can create a `.devops-project` file in the same directory as the script to avoid entering parameters each time. Example:
+
+```text
+organization=MyOrganization
+project=MyProject
+```
+
+If you run the script without parameters, it will use any values found in this file. You may include just one or both lines; the script will prompt for any missing information.
 
 ## Notes
 
