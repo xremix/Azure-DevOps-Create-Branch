@@ -26,8 +26,8 @@ Branches are automatically named using the following format:
 
 ### Types
 
-- feature
-- bug
+- `feature`
+- `bug`
 
 ### Examples
 
