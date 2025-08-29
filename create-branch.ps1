@@ -112,13 +112,16 @@ ORDER BY [System.Id]
             $title = $selectedWorkItem.fields.'System.Title'
             $workItemType = $selectedWorkItem.fields.'System.WorkItemType'
             # map type, if is not bug, write feature/
-                if ($workItemType -eq "Bug") {
-                    $branchType = "fix"
-                } else {
-                    $branchType = "feature"
-                }
+            if ($workItemType -eq "Bug") {
+                $branchType = "fix"
+            } else {
+                $branchType = "feature"
+            }
 
-            $branchName = "$($branchType.ToLower())/$($id)-$($title.ToLower().Replace(' ', '-'))"
+            # Clean title: remove special characters except spaces, then replace spaces with hyphens
+            $cleanTitle = ($title -replace '[^a-zA-Z0-9 ]', '')
+            $cleanTitle = $cleanTitle.ToLower().Replace(' ', '-')
+            $branchName = "$branchType/$id-$cleanTitle"
             # cut branch name after 100 chars
             $branchName = $branchName.Substring(0, [Math]::Min($branchName.Length, 100))
             $confirmation = Read-Host "Branch: $branchName (enter to confirm)"
