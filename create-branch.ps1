@@ -70,6 +70,8 @@ AND [System.State] != 'Open'
 AND [System.State] != 'Done'
 AND [System.State] != 'Removed'
 AND [System.State] != 'Rejected'
+AND [System.State] != 'In Production'
+AND [System.State] != 'Waiting for Release'
 AND [System.State] != 'Ready to Test'
 ORDER BY [System.Id]
 "@
