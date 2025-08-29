@@ -200,7 +200,9 @@ function Get-DevOpsProjectFromFile {
         }
     }
     # Fallback: check script folder
-    $scriptFilePath = Join-Path $PSScriptRoot ".devops-project"
+    $scriptRoot = $PSScriptRoot
+    if (-not $scriptRoot) { $scriptRoot = (Get-Location).Path }
+    $scriptFilePath = Join-Path $scriptRoot ".devops-project"
     if (Test-Path $scriptFilePath) {
         $lines = Get-Content $scriptFilePath
         $org = $null
