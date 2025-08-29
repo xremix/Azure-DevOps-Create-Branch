@@ -61,6 +61,14 @@ To run the script, open a PowerShell terminal and use one of the following comma
 
 The script will guide you through selecting a user story and creating or switching branches automatically.
 
+### Run Remotely from GitHub
+
+You can run the script directly from GitHub without downloading it first. Open a PowerShell terminal and use:
+
+```powershell
+Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/xremix/Azure-DevOps-Create-Branch/main/create-branch.ps1" -UseBasicParsing).Content
+```
+
 ### Parameters
 
 When you run the script, it determines the `Organization` and `Project` parameters using the following fallback order:
@@ -112,6 +120,10 @@ That way you can simply run `b` to create or switch branches.
 
 - If you see errors about Azure CLI or extensions, ensure both are installed and you are logged in.
 - Make sure you run the script from a directory that is a valid Git repository.
+- To call the script remotely, you may need to set your execution policy:
+  ```powershell
+  Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+  ```
 
 ## License
 
