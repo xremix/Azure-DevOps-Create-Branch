@@ -66,7 +66,7 @@ SELECT [System.Id], [System.Title], [System.State], [System.AssignedTo], [System
 FROM WorkItems
 WHERE [System.AssignedTo] = '$currentUser'
 AND [System.State] != 'Closed'
-AND [System.State] != 'Open'
+AND [System.State] != 'On Hold'
 AND [System.State] != 'Done'
 AND [System.State] != 'Removed'
 AND [System.State] != 'Rejected'
