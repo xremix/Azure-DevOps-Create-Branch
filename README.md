@@ -102,9 +102,40 @@ If you run the script without parameters, it will use any values found in this f
 - If the branch already exists, you can choose to switch to it or create a new branch with "-2" appended (e.g., `feature/123-title-2`).
 - You can set `$AlwaysCreateBranch = $true` in the script to always create a new branch, even if it already exists.
 
+## Create Pull Request (PR)
+
+The `create-pr.ps1` script simplifies the pull request creation process by automatically opening the Azure DevOps PR creation page in your default browser.
+
+### Features
+
+- **Automatic detection**: Extracts organization, project, and repository information from your git remote URL
+- **Smart branch selection**: Uses your current branch as the source branch
+- **Quick access**: Opens the PR creation URL directly in your browser with pre-filled source and target branches
+- **No configuration needed**: Works with any Azure DevOps repository
+
+### Usage
+
+```powershell
+.\create-pr.ps1
+```
+
+The script will:
+1. Read your git remote URL to determine the Azure DevOps organization, project, and repository
+2. Detect your current branch as the source branch
+3. Set `develop` as the default target branch
+4. Open your browser with the PR creation page
+
+### Customization
+
+To change the default target branch, edit the `$targetBranch` variable in the script:
+
+```powershell
+$targetBranch = "main"  # or any other branch name
+```
+
 ## macOS Pro Tip
 
-add this to your `.bash_prfile` or `.zshrc` file:
+add this to your `.bash_profile` or `.zshrc` file:
 
 ```bash
 function createbranch(){
@@ -112,9 +143,14 @@ function createbranch(){
 }
 alias branch=createbranch
 alias b=createbranch
-```
 
-That way you can simply run `b` to create or switch branches.
+function createpr(){
+  pwsh PATHTOSCRIPT/create-pr.ps1
+}
+alias pr=createpr
+```
+
+That way you can simply run `b` to create or switch branches, and `pr` to open a pull request.
 
 ## Troubleshooting
 
