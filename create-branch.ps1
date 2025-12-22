@@ -132,14 +132,18 @@ ORDER BY [System.Id]
 
             # check if branch already exists, if not create it, otherwise checkout
             if ($AlwaysCreateBranch -or -not (git branch --list $branchName)) {
+                $env:GIT_LFS_SKIP_SMUDGE = "1"
                 git checkout -b $branchName
+                $env:GIT_LFS_SKIP_SMUDGE = $null
             } else {
                 # Ask user if they want to switch to the branch or create a new one
                 Write-Host "Branch '$branchName' already exists" -ForegroundColor Yellow
                 $branchChoice = Read-Host "Switch or Create new branch? [S/c]"
                 if ($branchChoice -eq 'c') {
                     $newBranchName = "$branchName-2"
+                    $env:GIT_LFS_SKIP_SMUDGE = "1"
                     git checkout -b $newBranchName
+                    $env:GIT_LFS_SKIP_SMUDGE = $null
                 } else {
                     # check out the branch and switch over the open changes
                     git stash
